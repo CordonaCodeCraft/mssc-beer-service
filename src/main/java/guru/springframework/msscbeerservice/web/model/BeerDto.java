@@ -19,6 +19,15 @@ public class BeerDto {
     @Null
     private UUID id;
 
+    @Null
+    private Integer version;
+
+    @Null
+    private OffsetDateTime createdDate;
+
+    @Null
+    private OffsetDateTime lastModifiedDate;
+
     @NotBlank
     private String beerName;
 
@@ -27,22 +36,17 @@ public class BeerDto {
 
     @Positive
     @NotNull
+    private Long upc;
+
+    @Positive
+    @NotNull
     private BigDecimal price;
 
     private Integer quantityOnHand;
 
-    @Null
-    private Integer version;
 
-    @Positive
-    @NotNull
-    private Long upc;
 
-    @Null
-    private OffsetDateTime createdDate;
 
-    @Null
-    private OffsetDateTime lastModifiedDate;
 
 
 
