@@ -6,21 +6,22 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import javax.validation.ConstraintViolationException;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
+/**
+ * Created by jt on 2019-05-25.
+ */
 @ControllerAdvice
 public class MvcExceptionHandler {
 
     @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<List<String>> handleValidationErrors(ConstraintViolationException exception) {
+    public ResponseEntity<List> validationErrorHandler(ConstraintViolationException ex){
+        List<String> errorsList = new ArrayList<>(ex.getConstraintViolations().size());
 
-        List<String> errors = exception
-                .getConstraintViolations()
-                .stream()
-                .map(Object::toString)
-                .collect(Collectors.toList());;
+        ex.getConstraintViolations().forEach(error -> errorsList.add(error.toString()));
 
-        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(errorsList, HttpStatus.BAD_REQUEST);
     }
+
 }

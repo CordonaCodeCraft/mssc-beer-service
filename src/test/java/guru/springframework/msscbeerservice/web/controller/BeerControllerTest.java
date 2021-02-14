@@ -5,7 +5,6 @@ import guru.springframework.msscbeerservice.bootstrap.BeerLoader;
 import guru.springframework.msscbeerservice.services.BeerService;
 import guru.springframework.msscbeerservice.web.model.BeerDto;
 import guru.springframework.msscbeerservice.web.model.BeerStyleEnum;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -21,7 +20,6 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
 @WebMvcTest(BeerController.class)
 class BeerControllerTest {
 
@@ -34,19 +32,14 @@ class BeerControllerTest {
     @MockBean
     BeerService beerService;
 
-
-    @BeforeEach
-    void setUp() {
-    }
-
     @Test
     void getBeerById() throws Exception {
 
         given(beerService.getById(any())).willReturn(getValidBeerDto());
 
-        mockMvc.perform(get("/api/v1/beer/" + UUID.randomUUID().toString())
-                .accept(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get("/api/v1/beer/" + UUID.randomUUID().toString()).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
+
     }
 
     @Test
@@ -55,18 +48,16 @@ class BeerControllerTest {
         BeerDto beerDto = getValidBeerDto();
         String beerDtoJson = objectMapper.writeValueAsString(beerDto);
 
-        given(beerService.saveBeer(any())).willReturn(getValidBeerDto());
+        given(beerService.saveNewBeer(any())).willReturn(getValidBeerDto());
 
         mockMvc.perform(post("/api/v1/beer/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(beerDtoJson))
                 .andExpect(status().isCreated());
-
     }
 
     @Test
-    void updateBeer() throws Exception {
-
+    void updateBeerById() throws Exception {
         given(beerService.updateBeer(any(), any())).willReturn(getValidBeerDto());
 
         BeerDto beerDto = getValidBeerDto();
@@ -78,9 +69,8 @@ class BeerControllerTest {
                 .andExpect(status().isNoContent());
     }
 
-    BeerDto getValidBeerDto() {
-        return BeerDto
-                .builder()
+    BeerDto getValidBeerDto(){
+        return BeerDto.builder()
                 .beerName("My Beer")
                 .beerStyle(BeerStyleEnum.ALE)
                 .price(new BigDecimal("2.99"))

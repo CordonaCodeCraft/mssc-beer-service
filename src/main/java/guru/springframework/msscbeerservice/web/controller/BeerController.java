@@ -8,34 +8,31 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
-//todo: in case of validation problems - refer to Video #70 and the note for the validation annotations
-
-@Validated
+/**
+ * Created by jt on 2019-05-12.
+ */
 @RequiredArgsConstructor
-@RestController
 @RequestMapping("/api/v1/beer")
+@RestController
 public class BeerController {
 
     private final BeerService beerService;
 
-
     @GetMapping("/{beerId}")
-    public ResponseEntity<BeerDto> getBeerById(@NotNull @PathVariable UUID beerId) {
+    public ResponseEntity<BeerDto> getBeerById(@PathVariable("beerId") UUID beerId){
         return new ResponseEntity<>(beerService.getById(beerId), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<BeerDto> saveNewBeer(@NotNull @Valid @RequestBody BeerDto beerDto) {
-        return new ResponseEntity<>(beerService.saveBeer(beerDto), HttpStatus.CREATED);
+    public ResponseEntity saveNewBeer(@RequestBody @Validated BeerDto beerDto){
+        return new ResponseEntity<>(beerService.saveNewBeer(beerDto), HttpStatus.CREATED);
     }
 
     @PutMapping("/{beerId}")
-    public ResponseEntity updateBeer(@NotNull @PathVariable UUID beerId, @NotNull @Valid @RequestBody BeerDto beerDto) {
-        return new ResponseEntity(beerService.updateBeer(beerId, beerDto), HttpStatus.NO_CONTENT);
-
+    public ResponseEntity updateBeerById(@PathVariable("beerId") UUID beerId, @RequestBody @Validated BeerDto beerDto){
+        return new ResponseEntity<>(beerService.updateBeer(beerId, beerDto), HttpStatus.NO_CONTENT);
     }
+
 }
