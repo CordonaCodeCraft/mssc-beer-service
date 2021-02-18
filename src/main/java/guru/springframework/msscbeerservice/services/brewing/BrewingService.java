@@ -1,4 +1,4 @@
-package guru.springframework.msscbeerservice.services;
+package guru.springframework.msscbeerservice.services.brewing;
 
 import guru.springframework.msscbeerservice.config.JmsConfig;
 import guru.springframework.msscbeerservice.domain.Beer;
@@ -37,7 +37,7 @@ public class BrewingService {
             log.debug("Inventory is: " + invQOH);
 
             if (beer.getMinOnHand() >= invQOH) {
-                jmsTemplate.convertAndSend(JmsConfig.BREWING_REQUEST,
+                jmsTemplate.convertAndSend(JmsConfig.BREWING_REQUEST_QUEUE,
                         new BrewBeerEvent(beerMapper.beerToBeerDto(beer)));
             }
         });
