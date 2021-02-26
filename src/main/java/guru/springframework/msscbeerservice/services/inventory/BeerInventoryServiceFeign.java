@@ -11,11 +11,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+/**
+ * Created by jt on 3/7/20.
+ */
 @Slf4j
 @RequiredArgsConstructor
-
 @Profile("local-discovery")
-
 @Service
 public class BeerInventoryServiceFeign implements BeerInventoryService {
 
@@ -25,14 +26,15 @@ public class BeerInventoryServiceFeign implements BeerInventoryService {
     public Integer getOnhandInventory(UUID beerId) {
         log.debug("Calling Inventory Service - BeerId: " + beerId);
 
-        ResponseEntity<List<BeerInventoryDto>> responseEntity = inventoryServiceFeignClient.getOnHandInventory(beerId);
+        ResponseEntity<List<BeerInventoryDto>> responseEntity = inventoryServiceFeignClient.getOnhandInventory(beerId);
 
         Integer onHand = Objects.requireNonNull(responseEntity.getBody())
                 .stream()
                 .mapToInt(BeerInventoryDto::getQuantityOnHand)
                 .sum();
 
-        log.debug("BeerId: " + beerId + "On hand is: " + onHand);
+        log.debug("BeerId: " + beerId + " On hand is: " + onHand);
+
         return onHand;
     }
 }
